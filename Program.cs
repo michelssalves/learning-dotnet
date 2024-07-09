@@ -1,29 +1,96 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System;
+using System.IO;
+using System.Text.Json;
+using Bank;
 
-int i = 1;
+static class Program
+{
+    static void Main()
+    {
+       //JsonSerializer
+        ILogger fileLogger = new FileLogger("log.txt");
+        ILogger consoleLogger = new ConsoleLogger();
 
-int j = i++;
-i = j == 42 ? 10 : 20;
+        BankAccount account = new BankAccount("João", 100, consoleLogger);
+        account.Deposit(50);
 
-Console.WriteLine(j);
+        account = new BankAccount("Maria", 200, fileLogger);
+        account.Deposit(-10);
 
-Console.WriteLine(i);
 
-Console.Write("Fill your name: ");
-string name =  Console.ReadLine();
-Console.WriteLine($"Hello {name}" );
+        "teste".WriteLine(ConsoleColor.Yellow);
+    }
 
-Console.Write("Fill in your year of birth: ");
-int year = int.Parse(Console.ReadLine());
-int age = 2024 - year;
+}
+static class Extensions
+{
+    public static void WriteLine(this string text, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.WriteLine(text);
+        Console.ResetColor();
+    }
+}
+namespace Bank
+{
+    public class FileLogger : ILogger
+    {
+        private readonly string filePath;
 
-Console.WriteLine($"You have {age} year old");
+        public FileLogger(string filePath)
+        {
+            this.filePath = filePath;
+        }
+        public void Log(string message)
+        {
+            File.AppendAllText(filePath,$"{message}{Environment.NewLine}");
+        }
+    }
+    public class ConsoleLogger : ILogger
+    {
+        public void Log(string message)
+        {
+            Console.WriteLine(message);
+        }
+    }
+    public interface ILogger
+    {
+        void Log(string message)
+        {
+            Console.WriteLine(message);
+        }
+    }
+    public class BankAccount 
+    {
+        private string name;
+        private readonly ILogger logger;
 
-if (age > 17) {
-    Console.WriteLine("You are of legal age");
-}else{
-    Console.WriteLine("you are underage");
-} 
+        public decimal Balance { get; private set; }
 
-string[] names = { "Fredy", "Mariana"};
+        public BankAccount(string name, decimal balance, ILogger logger)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+            {
+            throw new ArgumentException("Nome invalido.", nameof(name));  
+            }
+            if(balance < 0 )
+            {
+                throw new Exception("Saldo não pode ser negativo");
+            }
+            this.name  = name;
+            Balance = balance;
+            this.logger = logger;
+        }
+
+        public void Deposit(decimal amount)
+        {
+            if(amount <= 0)
+            {
+                logger.Log($"Não é possivel depositar {amount} na conta de {name}");
+                return;
+            }
+            Balance += amount;
+            logger.Log($"Depositado {amount} na conta de {name}. Novo saldo: {Balance}");
+        }
+    }
+}
