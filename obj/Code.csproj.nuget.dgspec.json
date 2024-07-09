@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Code\\Code.csproj": {}
+    "C:\\learning-dotnet\\Code.csproj": {}
   },
   "projects": {
-    "C:\\Code\\Code.csproj": {
+    "C:\\learning-dotnet\\Code.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Code\\Code.csproj",
+        "projectUniqueName": "C:\\learning-dotnet\\Code.csproj",
         "projectName": "Code",
-        "projectPath": "C:\\Code\\Code.csproj",
+        "projectPath": "C:\\learning-dotnet\\Code.csproj",
         "packagesPath": "C:\\Users\\MICHEL\\.nuget\\packages\\",
-        "outputPath": "C:\\Code\\obj\\",
+        "outputPath": "C:\\learning-dotnet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\MICHEL\\AppData\\Roaming\\NuGet\\NuGet.Config"
